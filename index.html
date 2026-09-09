@@ -1,187 +1,32 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Boraconstruir PDV">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>Boraconstruir.com — PDV</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#2563eb"><link rel="manifest" href="manifest.json">
+<title>Boraconstruir.com</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,system-ui,sans-serif;background:#f3f4f6;color:#111827}
-header{background:#111827;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:5}
-.header{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1100px;margin:auto}
-.logo{font-weight:800;font-size:20px}.badge{font-size:12px;background:#374151;padding:5px 8px;border-radius:999px}
-main{max-width:1100px;margin:auto;padding:16px}.grid{display:grid;grid-template-columns:1.4fr .8fr;gap:16px}
-.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 10px #0000000b;margin-bottom:16px}
-h2,h3{margin:0 0 12px}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
-input,select,button{font:inherit;border-radius:10px;border:1px solid #d1d5db;padding:11px}
-button{cursor:pointer;background:#111827;color:#fff;border:0;font-weight:700}.secondary{background:#e5e7eb;color:#111827}.danger{background:#dc2626}
-.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
-.prod{padding:12px;border:1px solid #e5e7eb;border-radius:12px;background:#fafafa;text-align:left}.prod b{display:block}.price{font-weight:800;margin-top:5px}
-.cartline{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
-.qty{display:flex;align-items:center;gap:5px}.qty button{padding:5px 9px}.total{font-size:24px;font-weight:900;text-align:right;margin:14px 0}
-.nav{display:flex;gap:8px;overflow:auto;margin-bottom:16px}.nav button{white-space:nowrap}
-.section{display:none}.section.active{display:block}
-.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat div{background:#f9fafb;border-radius:12px;padding:12px}.stat strong{display:block;font-size:20px;margin-top:5px}
-.small{font-size:12px;color:#6b7280}.empty{padding:20px;text-align:center;color:#6b7280}
-@media(max-width:750px){.grid{grid-template-columns:1fr}.products{grid-template-columns:1fr 1fr}.stat{grid-template-columns:1fr}.card{padding:13px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#fff}main{max-width:760px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center}.logo{font-size:25px;font-weight:800;background:linear-gradient(90deg,#38bdf8,#e879f9);-webkit-background-clip:text;color:transparent}.offline{font-size:12px;background:#163b2a;padding:7px 10px;border-radius:20px}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:20px 0}.nav button,.btn{border:0;border-radius:12px;padding:12px;background:#18233b;color:#fff;cursor:pointer}.nav .on,.primary{background:#2563eb}.card{background:#121b31;border:1px solid #263452;border-radius:18px;padding:16px;margin:12px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}input{width:100%;padding:12px;border-radius:10px;border:1px solid #34415c;background:#0b1020;color:#fff;margin:5px 0 10px}label{font-size:12px;color:#aab6cc}.row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #263452}.hidden{display:none}.actions{display:flex;gap:8px;flex-wrap:wrap}.total{font-size:25px;font-weight:bold;color:#67e8f9}@media(max-width:450px){.grid{grid-template-columns:1fr}.nav button{font-size:11px;padding:10px 4px}}
 </style>
 </head>
-<body>
-<header><div class="header"><div class="logo">Boraconstruir.com</div><div class="badge">PDV OFFLINE</div></div></header>
-<main>
-<div class="card" style="padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
-  <span class="small">Sistema de vendas • Boraconstruir.com</span>
-  <strong style="font-size:13px">@guih.238.0</strong>
-</div>
-<div class="nav">
-<button onclick="tab('venda')">🛒 Venda</button>
-<button class="secondary" onclick="tab('produtos')">📦 Produtos</button>
-<button class="secondary" onclick="tab('vendas')">🧾 Vendas</button>
-<button class="secondary" onclick="tab('clientes')">👥 Clientes</button>
-<button class="secondary" onclick="tab('relatorios')">📊 Relatórios</button>
-</div>
-
-<section id="venda" class="section active">
-<div class="grid">
-<div class="card">
-<h2>Nova venda</h2>
-<div class="row">
-<input id="search" placeholder="Pesquisar produto ou código..." oninput="renderProducts()">
-<button onclick="scanBarcode()">📷 Ler código</button>
-</div>
-<div id="products" class="products"></div>
-</div>
-<div class="card">
-<h3>Carrinho</h3><div id="cart"></div>
-<div class="total">R$ <span id="total">0,00</span></div>
-<select id="payment"><option>PIX</option><option>Dinheiro</option><option>Débito</option><option>Crédito</option></select>
-<button style="width:100%;margin-top:8px" onclick="finishSale()">Finalizar venda</button>
-</div>
-</div>
-</section>
-
-<section id="produtos" class="section">
-<div class="card">
-<h2>Cadastro de produtos</h2>
-<div class="row"><input id="pn" placeholder="Nome do produto"><input id="pc" placeholder="Código de barras"><input id="pp" type="number" step=".01" placeholder="Preço"></div>
-<div class="row" style="margin-top:8px"><input id="ps" type="number" placeholder="Estoque"><button onclick="addProduct()">Adicionar produto</button></div>
-</div>
-<div class="card"><h3>Produtos cadastrados</h3><div id="productTable"></div></div>
-</section>
-
-<section id="vendas" class="section">
-<div class="card"><h2>Histórico de vendas</h2><div id="sales"></div></div>
-</section>
-
-<section id="clientes" class="section">
-<div class="card"><h2>Clientes</h2>
-<div class="row"><input id="cn" placeholder="Nome do cliente"><input id="ct" placeholder="Telefone (opcional)"><button onclick="addClient()">Cadastrar</button></div>
-<div id="clients" style="margin-top:12px"></div></div>
-</section>
-
-<section id="relatorios" class="section">
-<div class="card"><h2>Resumo</h2><div class="stat">
-<div>Vendas<strong id="rsales">0</strong></div><div>Faturamento<strong id="revenue">R$ 0,00</strong></div><div>Produtos<strong id="rproducts">0</strong></div>
-</div></div>
-</section>
+<body><main>
+<header class="top"><div><div class="logo">Boraconstruir.com</div><small>Vendas e estoque</small></div><span class="offline">Offline</span></header>
+<nav class="nav"><button class="on" data-tab="home">Início</button><button data-tab="products">Produtos</button><button data-tab="sale">Venda</button><button data-tab="history">Histórico</button></nav>
+<section id="home" class="page"><div class="card"><h2>Bem-vindo</h2><p>Cadastre produtos, altere preços e faça vendas sem internet.</p><div class="actions"><button class="btn primary" data-open="sale">Nova venda</button><button class="btn" data-open="products">Cadastrar produto</button></div></div><div class="card"><h3>Resumo</h3><div class="grid"><div><small>Produtos</small><h2 id="count">0</h2></div><div><small>Vendas</small><h2 id="salesCount">0</h2></div></div></div></section>
+<section id="products" class="page hidden"><div class="card"><h2>Produto</h2><form id="form"><label>Nome</label><input id="name" required><label>Código de barras</label><input id="code" required inputmode="numeric"><label>Preço</label><input id="price" type="number" step="0.01" required><label>Estoque</label><input id="stock" type="number" min="0" required><div class="actions"><button class="btn primary">Salvar / atualizar</button><button type="button" class="btn" id="clear">Limpar</button></div></form></div><div class="card"><h2>Produtos cadastrados</h2><div id="plist"></div></div></section>
+<section id="sale" class="page hidden"><div class="card"><h2>Leitor de código</h2><input id="scan" placeholder="Digite ou escaneie o código" inputmode="numeric"><button class="btn primary" id="add">Adicionar produto</button><p><small>Compatível com leitor físico Bluetooth/USB. A câmera será adicionada em uma próxima atualização.</small></p></div><div class="card"><h2>Venda</h2><div id="cart"></div><p>Total: <span class="total" id="total">R$ 0,00</span></p><div class="actions"><button class="btn" id="clearCart">Limpar</button><button class="btn primary" id="finish">Finalizar e gerar nota</button></div></div></section>
+<section id="history" class="page hidden"><div class="card"><h2>Histórico</h2><div id="historyList"></div></div></section>
 </main>
-
 <script>
-const KEY='boraconstruir_pdv_v1';
-let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
- products:[
- {id:1,name:'Cimento 50kg',code:'789000000001',price:35.90,stock:20},
- {id:2,name:'Argamassa AC-II',code:'789000000002',price:28.50,stock:30},
- {id:3,name:'Tinta Acrílica 18L',code:'789000000003',price:189.90,stock:8},
- {id:4,name:'Tubo PVC 25mm',code:'789000000004',price:12.90,stock:50}
- ],cart:[],sales:[],clients:[]
-};
-function save(){localStorage.setItem(KEY,JSON.stringify(db))}
-function money(v){return Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function tab(id){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll()}
-function renderProducts(){
- const q=(document.getElementById('search').value||'').toLowerCase();
- const list=db.products.filter(p=>p.name.toLowerCase().includes(q)||p.code.includes(q));
- document.getElementById('products').innerHTML=list.map(p=>`<button class="prod secondary" onclick="addCart(${p.id})"><b>${p.name}</b><span class="small">Código: ${p.code} · Estoque: ${p.stock}</span><span class="price">R$ ${money(p.price)}</span></button>`).join('')||'<div class="empty">Nenhum produto encontrado.</div>';
-}
-function addCart(id){let p=db.products.find(x=>x.id===id);if(!p||p.stock<=0)return alert('Produto sem estoque.');let c=db.cart.find(x=>x.id===id);if(c){if(c.qty>=p.stock)return alert('Quantidade maior que o estoque.');c.qty++}else db.cart.push({id,qty:1});save();renderCart()}
-function renderCart(){
- let total=0; const el=document.getElementById('cart');
- if(!db.cart.length){el.innerHTML='<div class="empty">Carrinho vazio</div>';document.getElementById('total').textContent='0,00';return}
- el.innerHTML=db.cart.map(c=>{let p=db.products.find(x=>x.id===c.id);let sub=p.price*c.qty;total+=sub;return `<div class="cartline"><div><b>${p.name}</b><div class="small">R$ ${money(p.price)} cada</div></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button><span>${c.qty}</span><button onclick="changeQty(${p.id},1)">+</button></div><b>R$ ${money(sub)}</b></div>`}).join('');
- document.getElementById('total').textContent=money(total)
-}
-function changeQty(id,d){let c=db.cart.find(x=>x.id===id),p=db.products.find(x=>x.id===id);if(!c)return;c.qty+=d;if(c.qty<=0)db.cart=db.cart.filter(x=>x.id!==id);else if(c.qty>p.stock)c.qty=p.stock;save();renderCart()}
-function finishSale(){
- if(!db.cart.length)return alert('Adicione produtos ao carrinho.');
- let total=db.cart.reduce((s,c)=>{let p=db.products.find(x=>x.id===c.id);return s+p.price*c.qty},0);
- const payment=document.getElementById('payment').value;
- db.cart.forEach(c=>{let p=db.products.find(x=>x.id===c.id);p.stock-=c.qty});
- db.sales.unshift({id:Date.now(),date:new Date().toLocaleString('pt-BR'),total,payment,items:db.cart.map(x=>({...x}))});
- db.cart=[];save();renderAll();alert('Venda finalizada com sucesso!')
-}
-function addProduct(){
- let name=document.getElementById('pn').value.trim(),code=document.getElementById('pc').value.trim(),price=Number(document.getElementById('pp').value),stock=Number(document.getElementById('ps').value);
- if(!name||!code||!price)return alert('Preencha nome, código e preço.');
- db.products.push({id:Date.now(),name,code,price,stock});save();
- ['pn','pc','pp','ps'].forEach(id=>document.getElementById(id).value='');renderAll();
-}
-function renderProductTable(){document.getElementById('productTable').innerHTML=db.products.map(p=>`<div class="cartline"><div><b>${p.name}</b><span class="small">${p.code} · estoque ${p.stock}</span></div><b>R$ ${money(p.price)}</b><button class="danger" onclick="removeProduct(${p.id})">Excluir</button></div>`).join('')}
-function removeProduct(id){if(confirm('Excluir este produto?')){db.products=db.products.filter(p=>p.id!==id);save();renderAll()}}
-function renderSales(){document.getElementById('sales').innerHTML=db.sales.length?db.sales.map(s=>`<div class="cartline"><div><b>Venda #${String(s.id).slice(-6)}</b><div class="small">${s.date} · ${s.payment}</div></div><b>R$ ${money(s.total)}</b></div>`).join(''):'<div class="empty">Nenhuma venda realizada.</div>'}
-function addClient(){let n=document.getElementById('cn').value.trim(),t=document.getElementById('ct').value.trim();if(!n)return alert('Informe o nome.');db.clients.push({name:n,tel:t});save();document.getElementById('cn').value='';document.getElementById('ct').value='';renderAll()}
-function renderClients(){document.getElementById('clients').innerHTML=db.clients.length?db.clients.map(c=>`<div class="cartline"><div><b>${c.name}</b><div class="small">${c.tel||'Sem telefone'}</div></div></div>`).join(''):'<div class="empty">Nenhum cliente cadastrado.</div>'}
-function renderReports(){let rev=db.sales.reduce((s,x)=>s+x.total,0);document.getElementById('rsales').textContent=db.sales.length;document.getElementById('revenue').textContent='R$ '+money(rev);document.getElementById('rproducts').textContent=db.products.length}
-function renderAll(){renderProducts();renderCart();renderProductTable();renderSales();renderClients();renderReports()}
-async function scanBarcode(){
-  if(!window.isSecureContext && location.protocol !== 'file:'){
-    return alert('A câmera precisa de uma conexão segura (HTTPS) para funcionar.');
-  }
-  if(!('BarcodeDetector' in window)){
-    const c=prompt('Leitura automática não é suportada neste navegador. Digite o código de barras:');
-    if(c){document.getElementById('search').value=c;renderProducts()}
-    return;
-  }
-  let formats=[];
-  try{ formats=await BarcodeDetector.getSupportedFormats(); }catch(e){}
-  if(!formats.length)return alert('O navegador não disponibilizou um formato de código de barras compatível.');
-
-  const wrap=document.createElement('div');
-  wrap.style.cssText='position:fixed;inset:0;background:#000e;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px';
-  wrap.innerHTML='<div style="color:white;font-weight:800;font-size:20px;margin-bottom:12px">Aponte para o código de barras</div><video autoplay playsinline style="width:min(92vw,520px);border-radius:16px;background:#111"></video><div style="color:white;margin:12px">Mantenha o código dentro do enquadramento</div><button style="padding:12px 20px;border-radius:10px;border:0;font-weight:800">Fechar</button>';
-  document.body.appendChild(wrap);
-  const video=wrap.querySelector('video'), close=wrap.querySelector('button');
-  let stream=null, timer=null, stopped=false;
-  const finish=()=>{if(stopped)return;stopped=true;if(timer)clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());wrap.remove()};
-  close.onclick=finish;
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}},audio:false});
-    video.srcObject=stream;
-    const detector=new BarcodeDetector({formats});
-    timer=setInterval(async()=>{
-      if(stopped||video.readyState<2)return;
-      try{
-        const codes=await detector.detect(video);
-        if(codes.length){
-          document.getElementById('search').value=codes[0].rawValue;
-          renderProducts(); finish();
-        }
-      }catch(e){}
-    },300);
-  }catch(e){
-    finish();
-    alert('Não foi possível abrir a câmera. Verifique a permissão de câmera do navegador.');
-  }
-}
-renderAll();
-if('serviceWorker' in navigator && location.protocol!=='file:'){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
-}
-</script>
-</body>
-</html>
+const $=id=>document.getElementById(id), brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+let products=JSON.parse(localStorage.getItem('bp_products')||'[]'), sales=JSON.parse(localStorage.getItem('bp_sales')||'[]'), cart=[];
+function save(){localStorage.setItem('bp_products',JSON.stringify(products));localStorage.setItem('bp_sales',JSON.stringify(sales))}
+function tab(id){document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));$(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('on',x.dataset.tab===id));render()}
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>tab(b.dataset.tab));document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>tab(b.dataset.open));
+$('form').onsubmit=e=>{e.preventDefault();let p={name:$('name').value,code:$('code').value,price:+$('price').value,stock:+$('stock').value};let old=products.find(x=>x.code===p.code);if(old)Object.assign(old,p);else products.push(p);save();e.target.reset();render()};
+$('clear').onclick=()=>$('form').reset();
+$('add').onclick=()=>{let p=products.find(x=>x.code===$('scan').value.trim());if(!p)return alert('Produto não encontrado');let i=cart.find(x=>x.code===p.code);if(i)i.qty++;else cart.push({...p,qty:1});$('scan').value='';render()};
+$('clearCart').onclick=()=>{cart=[];render()};
+$('finish').onclick=()=>{if(!cart.length)return alert('Adicione produtos');cart.forEach(i=>{let p=products.find(x=>x.code===i.code);p.stock=Math.max(0,p.stock-i.qty)});let total=cart.reduce((s,i)=>s+i.price*i.qty,0),note='Boraconstruir.com\\n\\n'+cart.map(i=>`${i.name} - ${i.qty} x ${brl(i.price)}`).join('\\n')+'\\n\\nTotal: '+brl(total);sales.push({date:new Date().toLocaleString('pt-BR'),total,note});save();cart=[];render();if(confirm('Venda salva. Deseja compartilhar a nota?'))location.href='https://wa.me/?text='+encodeURIComponent(note)};
+function render(){ $('count').textContent=products.length;$('salesCount').textContent=sales.length;$('plist').innerHTML=products.map(p=>`<div class="row"><span>${p.name}<br><small>${p.code} · estoque ${p.stock}</small></span><b>${brl(p.price)}</b></div>`).join('')||'<p>Nenhum produto.</p>';$('cart').innerHTML=cart.map(i=>`<div class="row"><span>${i.name}<br><small>${i.qty} x ${brl(i.price)}</small></span><b>${brl(i.qty*i.price)}</b></div>`).join('')||'<p>Nenhum item.</p>';$('total').textContent=brl(cart.reduce((s,i)=>s+i.price*i.qty,0));$('historyList').innerHTML=sales.slice().reverse().map(s=>`<div class="row"><span>${s.date}</span><b>${brl(s.total)}</b></div>`).join('')||'<p>Nenhuma venda.</p>'}
+render();
+</script></body></html>
